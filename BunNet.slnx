@@ -1,4 +1,10 @@
 <Solution>
+  <Folder Name="/bench/">
+    <Project Path="bench/BunNet.Bench/BunNet.Bench.csproj" />
+  </Folder>
+  <Folder Name="/security/">
+    <Project Path="security/BunNet.SecurityTest/BunNet.SecurityTest.csproj" />
+  </Folder>
   <Folder Name="/samples/">
     <Project Path="samples/BunNet.Sample/BunNet.Sample.csproj" />
   </Folder>
