@@ -139,7 +139,19 @@ function handleResponse(p) {
   if (entry) {
     pending.delete(id);
     const canHaveBody = status !== 204 && status !== 304;
-    entry.resolve(new Response(canHaveBody ? body : null, { status, headers }));
+    // new Response() validiert Statuscode und Header-Werte und WIRFT bei
+    // ungültigen Werten (z. B. CR/LF in einem Header oder ein Status außerhalb
+    // 200–599). Diese Exception darf NICHT bis in den data-Handler durchschlagen
+    // — sonst beendet ein einziger fehlerhafter Response den ganzen Worker (DoS).
+    // Deshalb hier abfangen und dem Client stattdessen ein sauberes 500 liefern.
+    let response;
+    try {
+      response = new Response(canHaveBody ? body : null, { status, headers });
+    } catch (err) {
+      console.error(`[bunnet] Ungültige Antwort verworfen (Request ${id}): ${err.message}`);
+      response = new Response("Internal Server Error", { status: 500 });
+    }
+    entry.resolve(response);
   }
 }
 

@@ -78,6 +78,7 @@ namespace BunNet.Tests
             server.MapPost("/api/query", HandleQuery);
             server.MapPost("/api/header", HandleHeader);
             server.MapPost("/api/crash", HandleCrash);
+            server.MapPost("/api/boesheader", HandleBadHeader);
             server.MapPost("/api/nichts", HandleNothing);
             server.MapGet("/api/zeit", HandleTime);
             server.MapPost("/api/feld", HandleField);   // synchroner Handler
@@ -137,6 +138,20 @@ namespace BunNet.Tests
 
             HttpResponseMessage nothingResponse = await PostText(baseUrl + "/api/nichts", "x");
             Check("Handler ohne Antwort liefert 204", (int)nothingResponse.StatusCode == 204);
+
+            // Sicherheit/Robustheit: Ein Handler, der einen ungültigen Header-Wert
+            // (mit CR/LF) setzt, darf NICHT den Bun-Worker abschießen (DoS). Bun lehnt
+            // den ungültigen Header ab — bridge.js fängt das ab und liefert 500.
+            HttpResponseMessage badHeaderResponse = await PostText(baseUrl + "/api/boesheader", "x");
+            string badHeaderBody = await badHeaderResponse.Content.ReadAsStringAsync();
+            Check("Ungültiger Response-Header wird zu 500 statt Worker-Crash",
+                (int)badHeaderResponse.StatusCode == 500 && !badHeaderBody.Contains("yes"));
+
+            // … und der Server muss den Angriff überleben und weiter antworten.
+            HttpResponseMessage afterBadHeader = await PostText(baseUrl + "/api/echo", "lebt-noch");
+            Check("Server bleibt nach ungültigem Header erreichbar",
+                afterBadHeader.IsSuccessStatusCode &&
+                await afterBadHeader.Content.ReadAsStringAsync() == "lebt-noch");
 
             // Neue Komfort-Zugriffe: request["feld"], BearerToken, synchrone Handler
             HttpResponseMessage fieldResponse = await PostJson(baseUrl + "/api/feld",
@@ -243,6 +258,13 @@ namespace BunNet.Tests
         private static Task<BunResponse> HandleCrash(BunRequest request)
         {
             throw new InvalidOperationException("Absichtlicher Testfehler");
+        }
+
+        // Setzt bewusst einen ungültigen Header-Wert (CR/LF). Bun weist ihn ab;
+        // die Bibliothek muss das abfangen, statt den Worker sterben zu lassen.
+        private static Task<BunResponse> HandleBadHeader(BunRequest request)
+        {
+            return Task.FromResult(BunResponse.Text("x").WithHeader("X-Boese", "evil\r\nInjected: yes"));
         }
 
         private static Task<BunResponse> HandleNothing(BunRequest request)
