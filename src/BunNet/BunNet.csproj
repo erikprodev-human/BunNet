@@ -10,6 +10,23 @@
     <AssemblyName>BunNet</AssemblyName>
     <Description>Minimalistischer Bun-Wrapper: Bun als HTTP/HTTPS-Frontend für .NET-Konsolenanwendungen, IPC über Unix Domain Sockets / Named Pipes.</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <!-- NuGet-Paket-Metadaten -->
+    <PackageId>BunNet</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>erikprodev-human</Authors>
+    <Company>erikprodev-human</Company>
+    <Product>BunNet</Product>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>https://github.com/erikprodev-human/BunNet</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/erikprodev-human/BunNet</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>bun;http;https;web;server;ipc;aot;native-aot;unix-domain-socket;named-pipe</PackageTags>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <!-- Die Bibliothek ist vollständig Native-AOT-kompatibel: kein Reflection-Zwang,
          binäres Drahtformat, JSON per JsonBuilder. Nur die optionalen Komfort-Methoden
@@ -22,6 +39,8 @@
     <!-- Das Bun-Bridge-Skript wird als eingebettete Ressource ausgeliefert
          und zur Laufzeit in ein Temp-Verzeichnis extrahiert. -->
     <EmbeddedResource Include="Assets/bridge.js" LogicalName="BunNet.bridge.js" />
+    <!-- README als Paket-Beschreibung auf nuget.org anzeigen. -->
+    <None Include="../../README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>
