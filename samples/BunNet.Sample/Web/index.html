@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BunNet Demo</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="card">
+    <header>
+      <h1>BunNet<span class="dot">.</span></h1>
+      <p class="subtitle">Bun als Webserver &middot; Logik in .NET &middot; IPC statt TCP</p>
+    </header>
+
+    <!-- Login-Ansicht -->
+    <section id="login-view">
+      <form id="login-form" autocomplete="off">
+        <label for="username">Benutzername</label>
+        <input id="username" name="username" type="text" required placeholder="admin">
+
+        <label for="password">Passwort</label>
+        <input id="password" name="password" type="password" required placeholder="••••••••">
+
+        <button type="submit" id="login-button">Anmelden</button>
+        <p id="login-error" class="error" hidden></p>
+      </form>
+      <p class="hint">Demo-Zugang: <code>admin / geheim123</code></p>
+    </section>
+
+    <!-- Profil-Ansicht (nach erfolgreichem Login) -->
+    <section id="profile-view" hidden>
+      <h2>Angemeldet als <span id="profile-user"></span></h2>
+      <dl id="profile-data"></dl>
+      <div class="actions">
+        <button id="refresh-button" type="button">Profil neu laden</button>
+        <button id="logout-button" type="button" class="secondary">Abmelden</button>
+      </div>
+    </section>
+
+    <footer>
+      <p>Statische Dateien liefert <strong>Bun</strong> &middot; <code>/api/*</code> beantwortet <strong>C#</strong></p>
+    </footer>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>

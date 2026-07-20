@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- net10.0 = primäres Ziel, netstandard2.1 = breite Kompatibilität (z. B. ältere Runtimes, Mono, Unity) -->
+    <TargetFrameworks>net10.0;netstandard2.1</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <RootNamespace>BunNet</RootNamespace>
+    <AssemblyName>BunNet</AssemblyName>
+    <Description>Minimalistischer Bun-Wrapper: Bun als HTTP/HTTPS-Frontend für .NET-Konsolenanwendungen, IPC über Unix Domain Sockets / Named Pipes.</Description>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <!-- Die Bibliothek ist vollständig Native-AOT-kompatibel: kein Reflection-Zwang,
+         binäres Drahtformat, JSON per JsonBuilder. Nur die optionalen Komfort-Methoden
+         BunResponse.Json<T>/BodyAsJson<T> nutzen Reflection und sind entsprechend
+         annotiert (der Compiler warnt AOT-Nutzer am Aufrufort). -->
+    <IsAotCompatible Condition="'$(TargetFramework)' == 'net10.0'">true</IsAotCompatible>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Das Bun-Bridge-Skript wird als eingebettete Ressource ausgeliefert
+         und zur Laufzeit in ein Temp-Verzeichnis extrahiert. -->
+    <EmbeddedResource Include="Assets/bridge.js" LogicalName="BunNet.bridge.js" />
+  </ItemGroup>
+
+</Project>

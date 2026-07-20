@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/samples/">
+    <Project Path="samples/BunNet.Sample/BunNet.Sample.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/BunNet/BunNet.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/BunNet.Tests/BunNet.Tests.csproj" />
+  </Folder>
+</Solution>

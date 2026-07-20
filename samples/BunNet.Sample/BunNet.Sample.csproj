@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>BunNet.Sample</RootNamespace>
+    <InvariantGlobalization>true</InvariantGlobalization>
+
+    <!-- Native AOT: "dotnet publish" erzeugt eine einzelne native Executable ohne
+         JIT — schnellerer Start, weniger RAM, konstante Spitzenleistung.
+         "dotnet run" funktioniert weiterhin normal (JIT), die AOT-Analyzer
+         melden aber schon beim Build, was AOT-inkompatibel wäre. -->
+    <PublishAot>true</PublishAot>
+    <!-- Codegenerierung auf Geschwindigkeit statt Größe ausrichten -->
+    <OptimizationPreference>Speed</OptimizationPreference>
+    <!-- Volles Instruction-Set der Build-Maschine nutzen (z. B. AVX2/NEON) -->
+    <IlcInstructionSet>native</IlcInstructionSet>
+    <!-- Server-GC: höherer Durchsatz unter Last (mehrere parallele GC-Heaps) -->
+    <ServerGarbageCollection>true</ServerGarbageCollection>
+    <TieredPgo>true</TieredPgo>
+    <StripSymbols>true</StripSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\BunNet\BunNet.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Statische Website neben die Anwendung kopieren -->
+    <Content Include="Web\**" CopyToOutputDirectory="PreserveNewest" />
+    <!-- Selbstsignierte Zertifikate mitkopieren (liegen bewusst NEBEN Web,
+         damit der private Schlüssel nie als statische Datei ausgeliefert wird) -->
+    <Content Include="cert\**" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

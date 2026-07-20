@@ -1,0 +1,14 @@
+# Build output
+bin/
+obj/
+
+# IDE / editor
+*.user
+.vs/
+.idea/
+
+# macOS
+.DS_Store
+
+# Self-signed sample certificates (auto-generated at runtime, never commit private keys)
+samples/BunNet.Sample/cert/*.pem
